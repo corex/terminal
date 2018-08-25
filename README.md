@@ -54,7 +54,4 @@ Console::properties(array $properties, $separator = ':');
 
 // Show list of words (same as implode($separator, $words)).
 Console::words(array $words, $separator = ', ');
-
-// Throw error in red background with white text followed by an exit.
-Console::throwError($message);
 ```
