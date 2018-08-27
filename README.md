@@ -1,20 +1,18 @@
 # Terminal
 
-This package is extending package league/climate with some basic static methods for easy access.
-
-All credits for the excellent work in package league/climate goes to team League.
-
-Documentation for CLImate can be found on https://climate.thephpleague.com/
+This package is using package league/climate as base.
+A few basic static methods has been added for easy access.
 
 ### Easy access to CLImate
-CLImate is the base and can easily be reached through method climate(). Uses Singleton.
+CLImate can easily be reached through singleton method climate().
+Documentation for CLImate can be found on https://climate.thephpleague.com/
 ```php
 $climate = Console::climate();
 $climate->...
 ```
 
 
-### Static methods for easy access.
+### Static often used methods.
 ```php
 // Get width of terminal.
 $width = Console::getTerminalWidth();
@@ -41,6 +39,7 @@ Console::warning($messages);
 Console::table(array $rows, array $headers = []);
 ```
 
+
 ### Additional static methods.
 ```php
 // Show separator (default length = 80. Can be changed through setLineLength*).
@@ -55,3 +54,8 @@ Console::properties(array $properties, $separator = ':');
 // Show list of words (same as implode($separator, $words)).
 Console::words(array $words, $separator = ', ');
 ```
+
+
+### Credits
+This package is heavily based on the awesome work of developers in team league (The League of Extraordinary Packages).
+All credits for the excellent work goes to them.
