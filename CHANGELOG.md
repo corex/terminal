@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.1
+
+### Fixed
+- Fixed required versions.
+
 ## 2.0.0
 
 ### Changed
