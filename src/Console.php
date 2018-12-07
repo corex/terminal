@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CoRex\Terminal;
 
 use League\CLImate\CLImate;
@@ -7,16 +9,21 @@ use League\CLImate\Util\UtilFactory;
 
 class Console
 {
+    /** @var int */
     private static $lineLength;
+
+    /** @var UtilFactory */
     private static $utilFactory;
+
+    /** @var CLImate */
     private static $climate;
 
     /**
      * Set length of line.
      *
-     * @param integer $lineLength
+     * @param int $lineLength
      */
-    public static function setLineLength($lineLength)
+    public static function setLineLength(int $lineLength): void
     {
         self::$lineLength = $lineLength;
     }
@@ -24,7 +31,7 @@ class Console
     /**
      * Set length of line as terminal width.
      */
-    public static function setLineLengthTerminal()
+    public static function setLineLengthTerminal(): void
     {
         self::$lineLength = self::getTerminalWidth();
     }
@@ -32,9 +39,9 @@ class Console
     /**
      * Get length of line.
      *
-     * @return integer
+     * @return int
      */
-    public static function getLineLength()
+    public static function getLineLength(): int
     {
         return self::$lineLength === null ? 80 : self::$lineLength;
     }
@@ -42,9 +49,9 @@ class Console
     /**
      * Get terminal width.
      *
-     * @return integer
+     * @return int
      */
-    public static function getTerminalWidth()
+    public static function getTerminalWidth(): int
     {
         return self::utilFactory()->width();
     }
@@ -52,9 +59,9 @@ class Console
     /**
      * Get terminal height.
      *
-     * @return integer
+     * @return int
      */
-    public static function getTerminalHeight()
+    public static function getTerminalHeight(): int
     {
         return self::utilFactory()->height();
     }
@@ -64,7 +71,7 @@ class Console
      *
      * @param string $title
      */
-    public static function header($title)
+    public static function header(string $title): void
     {
         $title = str_pad($title, self::getLineLength(), ' ', STR_PAD_RIGHT);
         self::title($title);
@@ -76,7 +83,7 @@ class Console
      *
      * @param string $character Default '-'.
      */
-    public static function separator($character = '-')
+    public static function separator(string $character = '-'): void
     {
         self::climate()->out(str_repeat($character, self::getLineLength()));
     }
@@ -84,9 +91,9 @@ class Console
     /**
      * Write title messages.
      *
-     * @param string|array $messages
+     * @param string|string[] $messages
      */
-    public static function title($messages)
+    public static function title($messages): void
     {
         self::climate()->yellow()->out($messages);
     }
@@ -94,9 +101,9 @@ class Console
     /**
      * Error.
      *
-     * @param string|array $messages
+     * @param string|string[] $messages
      */
-    public static function error($messages)
+    public static function error($messages): void
     {
         self::climate()->error($messages);
     }
@@ -104,9 +111,9 @@ class Console
     /**
      * Out.
      *
-     * @param string|array $messages
+     * @param string|string[] $messages
      */
-    public static function out($messages)
+    public static function out($messages): void
     {
         self::climate()->out($messages);
     }
@@ -114,9 +121,9 @@ class Console
     /**
      * Info.
      *
-     * @param string|array $messages
+     * @param string|string[] $messages
      */
-    public static function info($messages)
+    public static function info($messages): void
     {
         self::climate()->info($messages);
     }
@@ -124,9 +131,9 @@ class Console
     /**
      * Shout.
      *
-     * @param string|array $messages
+     * @param string|string[] $messages
      */
-    public static function shout($messages)
+    public static function shout($messages): void
     {
         self::climate()->shout($messages);
     }
@@ -134,9 +141,9 @@ class Console
     /**
      * Write warning messages.
      *
-     * @param string|array $messages
+     * @param string|string[] $messages
      */
-    public static function warning($messages)
+    public static function warning($messages): void
     {
         self::climate()->cyan()->out($messages);
     }
@@ -144,10 +151,10 @@ class Console
     /**
      * Properties.
      *
-     * @param array $properties
+     * @param string[] $properties
      * @param string $separator Default ':'.
      */
-    public static function properties(array $properties, $separator = ':')
+    public static function properties(array $properties, string $separator = ':'): void
     {
         $keys = array_keys($properties);
         $maxLength = max(array_map('strlen', $keys));
@@ -166,10 +173,10 @@ class Console
     /**
      * Show table.
      *
-     * @param array $rows
-     * @param array $headers Default [].
+     * @param mixed[] $rows
+     * @param string[] $headers Default [].
      */
-    public static function table(array $rows, array $headers = [])
+    public static function table(array $rows, array $headers = []): void
     {
         // Ensure it is a valid array.
         if (count($rows) > 0 && !is_array($rows[0])) {
@@ -191,10 +198,10 @@ class Console
     /**
      * Write words.
      *
-     * @param array $words
+     * @param string[] $words
      * @param string $separator Default ', '.
      */
-    public static function words(array $words, $separator = ', ')
+    public static function words(array $words, string $separator = ', '): void
     {
         self::out(implode($separator, $words));
     }
@@ -204,7 +211,7 @@ class Console
      *
      * @return CLImate
      */
-    public static function climate()
+    public static function climate(): CLImate
     {
         if (!is_object(self::$climate)) {
             self::$climate = new CLImate();
@@ -217,7 +224,7 @@ class Console
      *
      * @return UtilFactory
      */
-    private static function utilFactory()
+    private static function utilFactory(): UtilFactory
     {
         if (!is_object(self::$utilFactory)) {
             self::$utilFactory = new UtilFactory();

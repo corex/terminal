@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\CoRex\Terminal;
 
 use CoRex\Helpers\Obj;
@@ -11,9 +13,7 @@ use Tests\CoRex\Terminal\Helpers\TestWriter;
 
 class ConsoleTest extends TestCase
 {
-    /**
-     * @var TestWriter
-     */
+    /** @var TestWriter */
     private $writer;
 
     /**
@@ -21,7 +21,7 @@ class ConsoleTest extends TestCase
      *
      * @throws \ReflectionException
      */
-    public function testSetLineLength()
+    public function testSetLineLength(): void
     {
         Obj::setProperty('lineLength', null, null, Console::class);
         $this->assertEquals(80, Console::getLineLength());
@@ -34,7 +34,7 @@ class ConsoleTest extends TestCase
      *
      * @throws \ReflectionException
      */
-    public function testSetLineLengthTerminal()
+    public function testSetLineLengthTerminal(): void
     {
         Obj::setProperty('lineLength', null, null, Console::class);
         $this->assertEquals(80, Console::getLineLength());
@@ -45,7 +45,7 @@ class ConsoleTest extends TestCase
     /**
      * Test get terminal width.
      */
-    public function testGetTerminalWidth()
+    public function testGetTerminalWidth(): void
     {
         $utilFactory = new UtilFactory();
         $this->assertEquals($utilFactory->width(), Console::getTerminalWidth());
@@ -54,7 +54,7 @@ class ConsoleTest extends TestCase
     /**
      * Test get terminal height.
      */
-    public function testGetTerminalHeight()
+    public function testGetTerminalHeight(): void
     {
         $utilFactory = new UtilFactory();
         $this->assertEquals($utilFactory->height(), Console::getTerminalHeight());
@@ -63,7 +63,7 @@ class ConsoleTest extends TestCase
     /**
      * Test header.
      */
-    public function testHeader()
+    public function testHeader(): void
     {
         Console::header('title');
         $content = $this->writer->getContent();
@@ -77,7 +77,7 @@ class ConsoleTest extends TestCase
     /**
      * Test separator.
      */
-    public function testSeparator()
+    public function testSeparator(): void
     {
         Console::separator();
         $content = $this->writer->getContent();
@@ -87,7 +87,7 @@ class ConsoleTest extends TestCase
     /**
      * Test separator character.
      */
-    public function testSeparatorCharacter()
+    public function testSeparatorCharacter(): void
     {
         Console::separator('X');
         $content = $this->writer->getContent();
@@ -97,7 +97,7 @@ class ConsoleTest extends TestCase
     /**
      * Test title.
      */
-    public function testTitle()
+    public function testTitle(): void
     {
         Console::title(__FUNCTION__);
         $this->assertEquals(__FUNCTION__ . "\n", $this->writer->getContent());
@@ -106,7 +106,7 @@ class ConsoleTest extends TestCase
     /**
      * Test error.
      */
-    public function testError()
+    public function testError(): void
     {
         Console::error(__FUNCTION__);
         $this->assertEquals(__FUNCTION__ . "\n", $this->writer->getContent());
@@ -115,7 +115,7 @@ class ConsoleTest extends TestCase
     /**
      * Test out.
      */
-    public function testOut()
+    public function testOut(): void
     {
         Console::out(__FUNCTION__);
         $this->assertEquals(__FUNCTION__ . "\n", $this->writer->getContent());
@@ -124,7 +124,7 @@ class ConsoleTest extends TestCase
     /**
      * Test info.
      */
-    public function testInfo()
+    public function testInfo(): void
     {
         Console::info(__FUNCTION__);
         $this->assertEquals(__FUNCTION__ . "\n", $this->writer->getContent());
@@ -133,7 +133,7 @@ class ConsoleTest extends TestCase
     /**
      * Test shout.
      */
-    public function testShout()
+    public function testShout(): void
     {
         Console::shout(__FUNCTION__);
         $this->assertEquals(__FUNCTION__ . "\n", $this->writer->getContent());
@@ -142,7 +142,7 @@ class ConsoleTest extends TestCase
     /**
      * Test warning.
      */
-    public function testWarning()
+    public function testWarning(): void
     {
         Console::warning(__FUNCTION__);
         $this->assertEquals(__FUNCTION__ . "\n", $this->writer->getContent());
@@ -151,7 +151,7 @@ class ConsoleTest extends TestCase
     /**
      * Test properties.
      */
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'test1' => '1',
@@ -167,7 +167,7 @@ class ConsoleTest extends TestCase
     /**
      * Test table no headers.
      */
-    public function testTableNoHeaders()
+    public function testTableNoHeaders(): void
     {
         $items = ['test1', 'test2'];
         Console::table($items);
@@ -183,7 +183,7 @@ class ConsoleTest extends TestCase
     /**
      * Test table with headers.
      */
-    public function testTableWithHeaders()
+    public function testTableWithHeaders(): void
     {
         $items = ['test1', 'test2'];
         Console::table($items, ['Test']);
@@ -201,7 +201,7 @@ class ConsoleTest extends TestCase
     /**
      * Test words.
      */
-    public function testWords()
+    public function testWords(): void
     {
         $words = ['test1', 'test2', 'test3', 'test4'];
         Console::words($words);
@@ -214,7 +214,7 @@ class ConsoleTest extends TestCase
      *
      * @throws \ReflectionException
      */
-    public function testClimate()
+    public function testClimate(): void
     {
         $instance = Obj::callMethod('climate', null, [], Console::class);
         $this->assertInstanceOf(CLImate::class, $instance);
@@ -225,7 +225,7 @@ class ConsoleTest extends TestCase
      *
      * @throws \ReflectionException
      */
-    public function testUtilFactory()
+    public function testUtilFactory(): void
     {
         $instance = Obj::callMethod('utilFactory', null, [], Console::class);
         $this->assertInstanceOf(UtilFactory::class, $instance);
@@ -234,7 +234,7 @@ class ConsoleTest extends TestCase
     /**
      * Setup.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->writer = new TestWriter();
