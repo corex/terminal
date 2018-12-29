@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoRex\Terminal;
 
+use CoRex\Terminal\Widgets\Table;
 use League\CLImate\CLImate;
 use League\CLImate\Util\UtilFactory;
 
@@ -178,21 +179,13 @@ class Console
      */
     public static function table(array $rows, array $headers = []): void
     {
-        // Ensure it is a valid array.
-        if (count($rows) > 0 && !is_array($rows[0])) {
-            $rows = array_map(function ($item) {
-                return [$item];
-            }, $rows);
-        }
-
-        // Add headers if specified.
+        $table = new Table();
+        $table->setRows($rows);
         if (count($headers) > 0) {
-            $rows = array_map(function ($item) use ($headers) {
-                return array_combine($headers, array_values($item));
-            }, $rows);
+            $table->setHeaders($headers);
         }
-
-        self::climate()->table($rows);
+        $output = $table->render();
+        self::out($output);
     }
 
     /**

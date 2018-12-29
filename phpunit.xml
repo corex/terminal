@@ -16,6 +16,12 @@
     <filter>
         <whitelist>
             <directory suffix=".php">./src/</directory>
+            <exclude>
+
+                <!-- Exclude since it is developed elsewhere. -->
+                <file>./src/Helpers/OutputFormatterStyle.php</file>
+
+            </exclude>
         </whitelist>
     </filter>
 

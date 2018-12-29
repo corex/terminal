@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.0
+
+### Added
+- Added Style::class to help styling texts.
+
+### Changed
+- Changed to a more compact table.
+
 ## 2.0.1
 
 ### Fixed

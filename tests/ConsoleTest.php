@@ -6,6 +6,7 @@ namespace Tests\CoRex\Terminal;
 
 use CoRex\Helpers\Obj;
 use CoRex\Terminal\Console;
+use CoRex\Terminal\Style;
 use League\CLImate\CLImate;
 use League\CLImate\Util\UtilFactory;
 use PHPUnit\Framework\TestCase;
@@ -173,11 +174,10 @@ class ConsoleTest extends TestCase
         Console::table($items);
         $content = $this->writer->getContent();
         $content = explode("\n", $content);
-        $this->assertEquals('---------', $content[0]);
+        $this->assertEquals('+-------+', $content[0]);
         $this->assertEquals('| test1 |', $content[1]);
-        $this->assertEquals('---------', $content[2]);
-        $this->assertEquals('| test2 |', $content[3]);
-        $this->assertEquals('---------', $content[4]);
+        $this->assertEquals('| test2 |', $content[2]);
+        $this->assertEquals('+-------+', $content[3]);
     }
 
     /**
@@ -189,13 +189,12 @@ class ConsoleTest extends TestCase
         Console::table($items, ['Test']);
         $content = $this->writer->getContent();
         $content = explode("\n", $content);
-        $this->assertEquals('---------', $content[0]);
-        $this->assertEquals('| Test  |', $content[1]);
-        $this->assertEquals('=========', $content[2]);
+        $this->assertEquals('+-------+', $content[0]);
+        $this->assertEquals('| ' . Style::applyStyle('Test ', 'info') . ' |', $content[1]);
+        $this->assertEquals('+-------+', $content[2]);
         $this->assertEquals('| test1 |', $content[3]);
-        $this->assertEquals('---------', $content[4]);
-        $this->assertEquals('| test2 |', $content[5]);
-        $this->assertEquals('---------', $content[6]);
+        $this->assertEquals('| test2 |', $content[4]);
+        $this->assertEquals('+-------+', $content[5]);
     }
 
     /**
