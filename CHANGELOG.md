@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.2.0
+
+### Added
+- Added Console::clear().
+- Added Console::write().
+- Added Console::writeln().
+- Added Console::br().
+- Added Console::ask().
+- Added Console::password().
+- Added Console::confirm().
+- Added Console::checkboxes().
+- Added Console::radio().
+
 ## 2.1.0
 
 ### Added

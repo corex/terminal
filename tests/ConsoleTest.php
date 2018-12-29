@@ -5,9 +5,16 @@ declare(strict_types=1);
 namespace Tests\CoRex\Terminal;
 
 use CoRex\Helpers\Obj;
+use CoRex\Helpers\Str;
 use CoRex\Terminal\Console;
 use CoRex\Terminal\Style;
 use League\CLImate\CLImate;
+use League\CLImate\TerminalObject\Dynamic\Checkbox\CheckboxGroup;
+use League\CLImate\TerminalObject\Dynamic\Checkboxes;
+use League\CLImate\TerminalObject\Dynamic\Confirm;
+use League\CLImate\TerminalObject\Dynamic\Input;
+use League\CLImate\TerminalObject\Dynamic\InputAbstract;
+use League\CLImate\TerminalObject\Dynamic\Password;
 use League\CLImate\Util\UtilFactory;
 use PHPUnit\Framework\TestCase;
 use Tests\CoRex\Terminal\Helpers\TestWriter;
@@ -123,6 +130,42 @@ class ConsoleTest extends TestCase
     }
 
     /**
+     * Test write.
+     */
+    public function testWrite(): void
+    {
+        Console::write(__FUNCTION__);
+        $this->assertEquals(__FUNCTION__, $this->writer->getContent());
+    }
+
+    /**
+     * Test writeln.
+     */
+    public function testWriteln(): void
+    {
+        Console::writeln(__FUNCTION__);
+        $this->assertEquals(__FUNCTION__ . "\n", $this->writer->getContent());
+    }
+
+    /**
+     * Test br.
+     */
+    public function testBR(): void
+    {
+        Console::br(7);
+        $this->assertEquals(str_repeat("\n", 7), $this->writer->getContent());
+    }
+
+    /**
+     * Test clear.
+     */
+    public function testClear(): void
+    {
+        Console::clear();
+        $this->assertTrue(Str::contains($this->writer->getContent(), "\e[H\e[2J"));
+    }
+
+    /**
      * Test info.
      */
     public function testInfo(): void
@@ -206,6 +249,80 @@ class ConsoleTest extends TestCase
         Console::words($words);
         $content = $this->writer->getContent();
         $this->assertEquals(implode(', ', $words) . "\n", $content);
+    }
+
+    /**
+     * Test ask.
+     *
+     * @throws \ReflectionException
+     */
+    public function testAsk(): void
+    {
+        $check = md5((string)mt_rand(1, 100000));
+        $input = Console::ask($check . '1', $check . '2', false);
+        $this->assertInstanceOf(Input::class, $input);
+        $this->assertSame($check . '1', Obj::getProperty('prompt', $input, null, InputAbstract::class));
+        $this->assertSame($check . '2', Obj::getProperty('default', $input, null, Input::class));
+    }
+
+    /**
+     * Test secret.
+     *
+     * @throws \ReflectionException
+     */
+    public function testPassword(): void
+    {
+        $check = md5((string)mt_rand(1, 100000));
+        $input = Console::password($check, false);
+        $this->assertInstanceOf(Password::class, $input);
+        $this->assertSame($check, Obj::getProperty('prompt', $input, null, InputAbstract::class));
+    }
+
+    /**
+     * Test confirm.
+     *
+     * @throws \ReflectionException
+     */
+    public function testConfirm(): void
+    {
+        $check = md5((string)mt_rand(1, 100000));
+        $input = Console::confirm($check, 'y', false);
+        $this->assertInstanceOf(Confirm::class, $input);
+        $this->assertSame($check, Obj::getProperty('prompt', $input, null, InputAbstract::class));
+    }
+
+    /**
+     * Test checkboxes.
+     *
+     * @throws \ReflectionException
+     */
+    public function testCheckboxes(): void
+    {
+        $options = ['test1', 'test2'];
+        $check = md5((string)mt_rand(1, 100000));
+        $input = Console::checkboxes($check, $options, false);
+        $this->assertInstanceOf(Checkboxes::class, $input);
+        $this->assertSame($check, Obj::getProperty('prompt', $input, null, InputAbstract::class));
+
+        $checkboxes = Obj::getProperty('checkboxes', $input, null, Checkboxes::class);
+        $this->assertEquals(2, Obj::getProperty('count', $checkboxes, null, CheckboxGroup::class));
+    }
+
+    /**
+     * Test radio.
+     *
+     * @throws \ReflectionException
+     */
+    public function testRadio(): void
+    {
+        $options = ['test1', 'test2'];
+        $check = md5((string)mt_rand(1, 100000));
+        $input = Console::radio($check, $options, false);
+        $this->assertInstanceOf(Checkboxes::class, $input);
+        $this->assertSame($check, Obj::getProperty('prompt', $input, null, InputAbstract::class));
+
+        $checkboxes = Obj::getProperty('checkboxes', $input, null, Checkboxes::class);
+        $this->assertEquals(2, Obj::getProperty('count', $checkboxes, null, CheckboxGroup::class));
     }
 
     /**

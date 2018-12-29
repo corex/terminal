@@ -6,6 +6,10 @@ namespace CoRex\Terminal;
 
 use CoRex\Terminal\Widgets\Table;
 use League\CLImate\CLImate;
+use League\CLImate\TerminalObject\Dynamic\Checkboxes;
+use League\CLImate\TerminalObject\Dynamic\Confirm;
+use League\CLImate\TerminalObject\Dynamic\Input;
+use League\CLImate\TerminalObject\Dynamic\Password;
 use League\CLImate\Util\UtilFactory;
 
 class Console
@@ -68,6 +72,14 @@ class Console
     }
 
     /**
+     * Clear.
+     */
+    public static function clear(): void
+    {
+        self::climate()->clear();
+    }
+
+    /**
      * Write header (title + separator).
      *
      * @param string $title
@@ -117,6 +129,36 @@ class Console
     public static function out($messages): void
     {
         self::climate()->out($messages);
+    }
+
+    /**
+     * Write.
+     *
+     * @param string $message
+     */
+    public static function write(string $message): void
+    {
+        self::climate()->inline($message);
+    }
+
+    /**
+     * Writeln.
+     *
+     * @param string $message
+     */
+    public static function writeln(string $message): void
+    {
+        self::climate()->out($message);
+    }
+
+    /**
+     * Linebreak.
+     *
+     * @param int $count Default 1.
+     */
+    public static function br(int $count = 1): void
+    {
+        self::climate()->br($count);
     }
 
     /**
@@ -197,6 +239,109 @@ class Console
     public static function words(array $words, string $separator = ', '): void
     {
         self::out(implode($separator, $words));
+    }
+
+    /**
+     * Ask question.
+     *
+     * @param string $question
+     * @param mixed $defaultValue Default null.
+     * @param bool $prompt Default true.
+     * @return string|Input
+     */
+    public static function ask(string $question, ?string $defaultValue = null, bool $prompt = true)
+    {
+        $input = self::climate()->input($question);
+        if ($defaultValue !== null) {
+            $input->defaultTo($defaultValue);
+        }
+        if ($prompt) {
+            // @codeCoverageIgnoreStart
+            return $input->prompt();
+            // @codeCoverageIgnoreEnd
+        }
+        return $input;
+    }
+
+    /**
+     * Ask for password.
+     *
+     * @param string $question
+     * @param bool $prompt Default true.
+     * @return string|Password
+     */
+    public static function password(string $question, bool $prompt = true)
+    {
+        $input = self::climate()->password($question);
+        if ($prompt) {
+            // @codeCoverageIgnoreStart
+            return $input->prompt();
+            // @codeCoverageIgnoreEnd
+        }
+        return $input;
+    }
+
+    /**
+     * Confirm question.
+     *
+     * @param string $question
+     * @param string|null $defaultValue 'y' or 'n'. Default null which means not set.
+     * @param bool $prompt Default true.
+     * @return bool|Confirm
+     */
+    public static function confirm(string $question, ?string $defaultValue = null, bool $prompt = true)
+    {
+        $input = self::climate()->confirm($question);
+        if ($defaultValue !== null) {
+            $input->defaultTo($defaultValue);
+        }
+        if ($prompt) {
+            // @codeCoverageIgnoreStart
+            return $input->confirmed();
+            // @codeCoverageIgnoreEnd
+        }
+        return $input;
+    }
+
+    /**
+     * Checkboxes.
+     * (Does only works in non-Windows environments.)
+     *
+     * @param string $question
+     * @param mixed[] $options
+     * @param bool $prompt
+     * @return string|Checkboxes
+     */
+    public static function checkboxes(string $question, array $options, bool $prompt = true)
+    {
+        $input = self::climate()->checkboxes($question, $options);
+        if ($prompt) {
+            // @codeCoverageIgnoreStart
+            return $input->prompt();
+            // @codeCoverageIgnoreEnd
+        }
+        return $input;
+    }
+
+    /**
+     * Radio.
+     * .
+     * (Does only works in non-Windows environments.)
+     *
+     * @param string $question
+     * @param mixed[] $options
+     * @param bool $prompt
+     * @return string|Checkboxes
+     */
+    public static function radio(string $question, array $options, bool $prompt = true)
+    {
+        $input = self::climate()->radio($question, $options);
+        if ($prompt) {
+            // @codeCoverageIgnoreStart
+            return $input->prompt();
+            // @codeCoverageIgnoreEnd
+        }
+        return $input;
     }
 
     /**
