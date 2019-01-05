@@ -165,7 +165,7 @@ class Table
         $output[] = $this->charVertical;
         $columnNumber = 0;
         foreach ($row as $column => $value) {
-            $output[] = $this->renderCell($columnNumber, $value, ' ');
+            $output[] = $this->renderCell($columnNumber, (string)$value, ' ');
             $output[] = $this->charVertical;
             $columnNumber++;
         }
