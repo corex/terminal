@@ -1,5 +1,10 @@
 # Terminal
 
+![License](https://img.shields.io/packagist/l/corex/terminal.svg)
+![Build Status](https://travis-ci.org/corex/terminal.svg?branch=master)
+![codecov](https://codecov.io/gh/corex/terminal/branch/master/graph/badge.svg)
+
+
 This package is using package league/climate as base.
 A few basic static methods has been added for easy access.
 
