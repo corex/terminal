@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoRex\Terminal;
 
+use CoRex\Helpers\Arr;
 use CoRex\Terminal\Helpers\OutputFormatterStyle;
 
 class Style
@@ -17,6 +18,16 @@ class Style
         'comment' => ['foreground' => 'green', 'background' => ''],
         'title' => ['foreground' => 'yellow', 'background' => '']
     ];
+
+    /**
+     * Get styles.
+     *
+     * @return array
+     */
+    public static function getStyles(): array
+    {
+        return self::$styles;
+    }
 
     /**
      * Set style.

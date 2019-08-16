@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.2
+
+### Fixed
+- Added basic colors to CLImate from Style::class.
+
 ## 2.2.1
 
 ### Fixed

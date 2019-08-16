@@ -353,6 +353,19 @@ class Console
     {
         if (!is_object(self::$climate)) {
             self::$climate = new CLImate();
+
+            // Add colors from local style class.
+            $climateColors = self::$climate->style->all();
+            $climateColorNames = array_keys($climateColors);
+            $styles = Style::getStyles();
+            foreach ($styles as $name => $value) {
+                $color = $value['foreground'];
+                if (in_array($name, $climateColorNames) && !array_key_exists($color, $climateColorNames)) {
+                    continue;
+                }
+                $colorValue = $climateColors[$color];
+                self::$climate->style->addColor($name, $colorValue);
+            }
         }
         return self::$climate;
     }
