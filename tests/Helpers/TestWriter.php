@@ -32,6 +32,7 @@ class TestWriter implements WriterInterface
         if ($this->content === null) {
             $this->content = '';
         }
+
         $this->content .= $content;
     }
 }

@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace CoRex\Terminal;
 
 use CoRex\Terminal\Widgets\Table;
+use CoRex\Terminal\Writers\SymfonyWriter;
 use League\CLImate\CLImate;
 use League\CLImate\TerminalObject\Dynamic\Checkboxes;
 use League\CLImate\TerminalObject\Dynamic\Confirm;
 use League\CLImate\TerminalObject\Dynamic\Input;
 use League\CLImate\TerminalObject\Dynamic\Password;
 use League\CLImate\Util\UtilFactory;
+use League\CLImate\Util\Writer\WriterInterface;
 
 class Console
 {
@@ -22,6 +24,25 @@ class Console
 
     /** @var CLImate */
     private static $climate;
+
+    /** @var WriterInterface */
+    private static $writer;
+
+    /**
+     * Set Symfony output.
+     *
+     * @param object $output
+     * @throws \Exception
+     */
+    public static function setSymfonyOutput(object $output): void
+    {
+        // Validate Symfony Output.
+        if (get_class($output) !== 'Symfony\Component\Console\Output\ConsoleOutput') {
+            throw new \Exception('Invalid Symfony Output.');
+        }
+
+        self::$writer = new SymfonyWriter($output);
+    }
 
     /**
      * Set length of line.
@@ -354,6 +375,12 @@ class Console
         if (!is_object(self::$climate)) {
             self::$climate = new CLImate();
 
+            // Set custom writer if specified.
+            if (self::$writer !== null) {
+                self::$climate->output->add('custom', self::$writer);
+                self::$climate->output->defaultTo('custom');
+            }
+
             // Add colors from local style class.
             $climateColors = self::$climate->style->all();
             $climateColorNames = array_keys($climateColors);
@@ -367,6 +394,7 @@ class Console
                 self::$climate->style->addColor($name, $colorValue);
             }
         }
+
         return self::$climate;
     }
 

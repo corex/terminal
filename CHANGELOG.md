@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0
+
+### Added
+- Added option to set Symfony writer output.
+
 ## 2.2.2
 
 ### Fixed

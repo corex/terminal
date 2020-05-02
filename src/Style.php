@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoRex\Terminal;
 
-use CoRex\Helpers\Arr;
 use CoRex\Terminal\Helpers\OutputFormatterStyle;
 
 class Style
@@ -22,7 +21,7 @@ class Style
     /**
      * Get styles.
      *
-     * @return array
+     * @return mixed[]
      */
     public static function getStyles(): array
     {

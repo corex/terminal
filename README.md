@@ -8,6 +8,8 @@
 This package is using package league/climate as base.
 A few basic static methods has been added for easy access.
 
+It is possible to set Symfony output on Console::class.
+
 ### Easy access to CLImate
 CLImate can easily be reached through singleton method climate().
 Documentation for CLImate can be found on https://climate.thephpleague.com/

@@ -8,6 +8,7 @@ use CoRex\Helpers\Obj;
 use CoRex\Helpers\Str;
 use CoRex\Terminal\Console;
 use CoRex\Terminal\Style;
+use Exception;
 use League\CLImate\CLImate;
 use League\CLImate\TerminalObject\Dynamic\Checkbox\CheckboxGroup;
 use League\CLImate\TerminalObject\Dynamic\Checkboxes;
@@ -17,6 +18,8 @@ use League\CLImate\TerminalObject\Dynamic\InputAbstract;
 use League\CLImate\TerminalObject\Dynamic\Password;
 use League\CLImate\Util\UtilFactory;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Tests\CoRex\Terminal\Helpers\TestWriter;
 
 class ConsoleTest extends TestCase
@@ -25,9 +28,50 @@ class ConsoleTest extends TestCase
     private $writer;
 
     /**
+     * Test set Symfony output.
+     *
+     * @throws ReflectionException
+     */
+    public function testSetSymfonyOutput(): void
+    {
+        // Validate not set.
+        $availableWriters = array_keys(Console::climate()->output->getAvailable());
+        $this->assertFalse(in_array('custom', $availableWriters));
+
+        // Reset console object for CLImate.
+        Obj::setProperty('climate', null, null, Console::class);
+
+        // Set Symfony console output.
+        $output = new ConsoleOutput();
+        Console::setSymfonyOutput($output);
+
+        // Validate custom writer set.
+        $climate = Console::climate();
+        $availableWriters = array_keys($climate->output->getAvailable());
+        $this->assertTrue(in_array('custom', $availableWriters));
+
+        // Validate Symfony console output set.
+        $customWriter = $climate->output->get('custom');
+        $output = Obj::getProperty('output', $customWriter);
+        $this->assertEquals(get_class($output), ConsoleOutput::class);
+    }
+
+    /**
+     * Test set Symfony output invalid output.
+     *
+     * @throws Exception
+     */
+    public function testSetSymfonyOutputInvalidOutput(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid Symfony Output.');
+        Console::setSymfonyOutput(new TestWriter());
+    }
+
+    /**
      * Test set line length.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testSetLineLength(): void
     {
@@ -40,7 +84,7 @@ class ConsoleTest extends TestCase
     /**
      * Test set line length terminal
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testSetLineLengthTerminal(): void
     {
@@ -254,7 +298,7 @@ class ConsoleTest extends TestCase
     /**
      * Test ask.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testAsk(): void
     {
@@ -268,7 +312,7 @@ class ConsoleTest extends TestCase
     /**
      * Test secret.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testPassword(): void
     {
@@ -281,7 +325,7 @@ class ConsoleTest extends TestCase
     /**
      * Test confirm.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testConfirm(): void
     {
@@ -294,7 +338,7 @@ class ConsoleTest extends TestCase
     /**
      * Test checkboxes.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testCheckboxes(): void
     {
@@ -311,7 +355,7 @@ class ConsoleTest extends TestCase
     /**
      * Test radio.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testRadio(): void
     {
@@ -328,7 +372,7 @@ class ConsoleTest extends TestCase
     /**
      * Test climate.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testClimate(): void
     {
@@ -339,7 +383,7 @@ class ConsoleTest extends TestCase
     /**
      * Test util factory.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testUtilFactory(): void
     {
@@ -356,7 +400,7 @@ class ConsoleTest extends TestCase
         $this->writer = new TestWriter();
         $climate = Console::climate();
         $climate->forceAnsiOff(); // It is ok to force ansi off since it is tested elsewhere.
-        $climate->output->add('logger', $this->writer);
-        $climate->output->defaultTo('logger');
+        $climate->output->add('tester', $this->writer);
+        $climate->output->defaultTo('tester');
     }
 }
